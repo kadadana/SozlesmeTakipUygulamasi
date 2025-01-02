@@ -114,7 +114,7 @@ namespace SozlesmeTakipUygulamasi
 
         private void SozlesmeDBEkrani_Load(object sender, EventArgs e)
         {
-            Ananizisikik;
+            
         }
     }
 
