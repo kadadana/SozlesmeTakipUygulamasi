@@ -14,7 +14,7 @@ namespace SozlesmeTakipUygulamasi
         public DateTime BaslangicTarihi { get; set; }
         public DateTime BitisTarihi { get; set; }
         public double Tutar { get; set; }
-        public bool Gecerlilik { get; set; }
+        public string Durum { get; set; }
         public string DosyaYolu { get; set; }
     }
 }

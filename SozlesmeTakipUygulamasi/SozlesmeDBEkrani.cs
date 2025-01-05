@@ -32,23 +32,22 @@ namespace SozlesmeTakipUygulamasi
 
             dataGridView1.DataSource = veriTablosu;
 
-            dataGridView1.Columns["DosyaYolu"].Visible = false;
-
 
             dataGridView1.Columns["Baslik"].HeaderText = "Başlık";
             dataGridView1.Columns["Taraflar"].HeaderText = "Taraflar";
             dataGridView1.Columns["BaslangicTarihi"].HeaderText = "Başlangıç Tarihi";
             dataGridView1.Columns["BitisTarihi"].HeaderText = "Bitiş Tarihi";
             dataGridView1.Columns["Tutar"].HeaderText = "Tutar";
-            dataGridView1.Columns["Gecerlilik"].HeaderText = "Geçerlilik";
+            dataGridView1.Columns["Durum"].HeaderText = "Durum";
+
 
         }
 
         private void btnSozlesmeEkle_Click(object sender, EventArgs e)
         {
-            SozlesmeEkle sozlesmeEklemeEkrani = new SozlesmeEkle();
+            SozlesmeEkle sozlesmeEklemeEkrani = new SozlesmeEkle(false);
 
-            sozlesmeEklemeEkrani.DuzenlemeMi = false;
+
             sozlesmeEklemeEkrani.ShowDialog();
 
 
@@ -89,32 +88,30 @@ namespace SozlesmeTakipUygulamasi
             }
         }
 
-        public void btnSozlesmeDuzenle_Click(object sender, EventArgs e)
+        private void btnSozlesmeDuzenle_Click(object sender, EventArgs e)
         {
+
             if (dataGridView1.SelectedRows.Count == 1)
             {
-
                 DataGridViewRow seciliSatir = dataGridView1.SelectedRows[0];
                 int id = Convert.ToInt32(seciliSatir.Cells["Id"].Value);
 
-                SozlesmeEkle sozlesmeEklemeEkrani = new SozlesmeEkle();
-
-                sozlesmeEklemeEkrani.VeriCekenId = id;
-                sozlesmeEklemeEkrani.DuzenlemeMi = true;
-
-                sozlesmeEklemeEkrani.ShowDialog();
-
-
+                SozlesmeEkle sozlesmeDuzenlemeEkrani = new SozlesmeEkle(true);
+                sozlesmeDuzenlemeEkrani.VeriCekenId = id;
+                sozlesmeDuzenlemeEkrani.SozlesmeGetir(id);
+                sozlesmeDuzenlemeEkrani.ShowDialog();
             }
             else
             {
                 MessageBox.Show("Düzenlemek için bir satır seçmeniz gerekmektedir.");
             }
+
+
         }
 
-        private void SozlesmeDBEkrani_Load(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            
+            VerileriGoster();
         }
     }
 

@@ -14,19 +14,29 @@ namespace SozlesmeTakipUygulamasi
         private string kokKlasoru = @"C:\Sozlesmeler\";
         private string secilenDosyaYolu = null;
         private VeriDeposu depo = new VeriDeposu();
-        private int idSayac = 1;
-        private bool gecerlilikBool = false;
-        public int VeriCekenId;
+        public int VeriCekenId { get; set; }
 
-        public bool DuzenlemeMi;
 
-        public SozlesmeEkle()
+
+        public SozlesmeEkle(bool DuzenlemeMi)
         {
+            bool duzenlemeMi = DuzenlemeMi;
 
             InitializeComponent();
-
+            if (duzenlemeMi)
+            {
+                btnEkle.Visible = false;
+                btnKaydet.Visible = true;
+                this.Refresh();
+            }
+            else
+            {
+                btnEkle.Visible = true;
+                btnKaydet.Visible = false;
+                this.Refresh();
+            }
             depo.BaglantiOlustur();
-            depo.TabloOlustur();
+            depo.TabloKontrolYoksaOlustur();
 
         }
 
@@ -43,30 +53,74 @@ namespace SozlesmeTakipUygulamasi
                 }
             }
         }
+        private void btnKaydet_Click(object sender, EventArgs e)
+        {
+            
 
+
+            // VeriDeposu sınıfından bir nesne oluşturuyoruz
+            VeriDeposu veriDeposu = new VeriDeposu();
+
+            // BaglantiOlustur metodunu çağırıyoruz
+            SQLiteConnection baglanti = veriDeposu.BaglantiOlustur();
+
+            // İlgili verileri alıyoruz
+            int sozlesmeId = VeriCekenId; // VeriCekenId'yi doğru şekilde almanız gerek
+            string baslik = txtBaslik.Text;
+            string taraflar = txtTaraflar.Text;
+            DateTime baslangicTarihi = dtpBaslangicTarihi.Value;
+            DateTime bitisTarihi = dtpBitisTarihi.Value;
+            double tutar = Convert.ToDouble(txtTutar.Text);
+            string durum = cmbDurum.SelectedIndex.ToString();
+
+            // SQL komutunu yazıyoruz
+            string guncelleKomutu = @"
+        UPDATE Sozlesme
+        SET Baslik = @Baslik,
+            Taraflar = @Taraflar,
+            BaslangicTarihi = @BaslangicTarihi,
+            BitisTarihi = @BitisTarihi,
+            Tutar = @Tutar,
+            Durum = @Durum
+        WHERE Id = @Id;
+    ";
+
+            // Veritabanı bağlantısını ve komutları kullanıyoruz
+            using (var komut = new SQLiteCommand(guncelleKomutu, baglanti))
+            {
+                komut.Parameters.AddWithValue("@Id", sozlesmeId);
+                komut.Parameters.AddWithValue("@Baslik", baslik);
+                komut.Parameters.AddWithValue("@Taraflar", taraflar);
+                komut.Parameters.AddWithValue("@BaslangicTarihi", baslangicTarihi.ToString("yyyy-MM-dd"));
+                komut.Parameters.AddWithValue("@BitisTarihi", bitisTarihi.ToString("yyyy-MM-dd"));
+                komut.Parameters.AddWithValue("@Tutar", tutar);
+                komut.Parameters.AddWithValue("@Durum", durum);
+
+                komut.ExecuteNonQuery();
+            }
+
+            // Bilgilendirme mesajı
+            MessageBox.Show("Sözleşme başarıyla güncellendi.");
+
+            // Ekranı kapatıyoruz
+            this.Close();
+        }
+        
         private void btnEkle_Click(object sender, EventArgs e)
         {
 
-            if (cmbGecerlilik.SelectedItem.ToString() == "Geçerli")
-            {
-                gecerlilikBool = true;
-            }
-            else
-            {
-                gecerlilikBool = false;
-            }
-
+            
             Sozlesme sozlesme = new Sozlesme
             {
 
 
-                Id = idSayac++,
+                Id = depo.IdSayac() + 1,
                 Baslik = txtBaslik.Text,
                 Taraflar = txtTaraflar.Text,
                 Tutar = Convert.ToDouble(txtTutar.Text),
                 BaslangicTarihi = dtpBaslangicTarihi.Value,
                 BitisTarihi = dtpBitisTarihi.Value,
-                Gecerlilik = gecerlilikBool,
+                Durum = cmbDurum.SelectedItem.ToString(),
                 DosyaYolu = secilenDosyaYolu,
 
             };
@@ -90,16 +144,13 @@ namespace SozlesmeTakipUygulamasi
                 DosyayiKopyala(sozlesme.DosyaYolu, sozlesmeKlasoru);
             }
 
-            depo.SozlesmeyiDByeEkle(sozlesme.Id, sozlesme.Baslik, sozlesme.Taraflar, sozlesme.BaslangicTarihi, sozlesme.BitisTarihi, (double)sozlesme.Tutar, sozlesme.Gecerlilik);
+            depo.SozlesmeyiDByeEkle(sozlesme.Id, sozlesme.Baslik, sozlesme.Taraflar, sozlesme.BaslangicTarihi, sozlesme.BitisTarihi, (double)sozlesme.Tutar, sozlesme.Durum);
 
             secilenDosyaYolu = null;
 
         }
 
-        private void btnDuzenle_Click(object sender, EventArgs e)
-        {
 
-        }
 
 
         private void DosyayiKopyala(string kaynakDosyaYolu, string hedefKlasör)
@@ -134,50 +185,56 @@ namespace SozlesmeTakipUygulamasi
             }
         }
 
-        private void SozlesmeEkle_Load(object sender, EventArgs e)
+        
+
+        public void VerileriYukle(int sozlesmeId)
         {
 
-            this.Controls.Add(btnDuzenle);
-            if (DuzenlemeMi)
-            {
+            Sozlesme sozlesme = depo.SozlesmeGetir(sozlesmeId);
 
-                Sozlesme sozlesme = depo.SozlesmeGetir(SozlesmeId);
-
-                if (sozlesme != null)
-                {
-                    txtBaslik.Text = sozlesme.Baslik;
-                    txtTaraflar.Text = sozlesme.Taraflar;
-                    dtpBaslangicTarihi.Value = sozlesme.BaslangicTarihi;
-                    dtpBitisTarihi.Value = sozlesme.BitisTarihi;
-                    txtTutar.Text = sozlesme.Tutar.ToString();
-                    cmbGecerlilik.SelectedItem = sozlesme.Gecerlilik;
-
-                    btnEkle.Visible = false;
-                    btnDuzenle.Visible = true;
-
-                }
-                else
-                {
-                    MessageBox.Show("Sözleşme bilgileri bulunamadı.");
-
-                }
-
-            }
-            else
-            {
-
-                btnEkle.Visible = true;
-                btnDuzenle.Visible = false;
-
-
-            }
-            this.Refresh();
-
+            txtBaslik.Text = sozlesme.Baslik;
+            txtTaraflar.Text = sozlesme.Taraflar;
+            dtpBaslangicTarihi.Value = sozlesme.BaslangicTarihi;
+            dtpBitisTarihi.Value = sozlesme.BitisTarihi;
+            txtTutar.Text = sozlesme.Tutar.ToString();
+            cmbDurum.SelectedItem = sozlesme.Durum;
         }
-
-        private void txtBaslik_TextChanged(object sender, EventArgs e)
+        public void SozlesmeGetir(int sozlesmeId)
         {
+            // VeriDeposu sınıfından bir nesne oluşturuyoruz
+            VeriDeposu veriDeposu = new VeriDeposu();
+            SQLiteConnection baglanti = veriDeposu.BaglantiOlustur();
 
+            // Veritabanından veri çekme
+            string sorgu = "SELECT * FROM Sozlesme WHERE Id = @Id";
+            using (SQLiteCommand komut = new SQLiteCommand(sorgu, baglanti))
+            {
+                komut.Parameters.AddWithValue("@Id", sozlesmeId);
+
+                using (SQLiteDataReader reader = komut.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        // Verileri alıyoruz ve ekrandaki alanlara yerleştiriyoruz
+                        txtBaslik.Text = reader["Baslik"].ToString();
+                        txtTaraflar.Text = reader["Taraflar"].ToString();
+                        dtpBaslangicTarihi.Value = Convert.ToDateTime(reader["BaslangicTarihi"]);
+                        dtpBitisTarihi.Value = Convert.ToDateTime(reader["BitisTarihi"]);
+                        txtTutar.Text = reader["Tutar"].ToString();
+                        string gecerlilikDurumu = reader["Durum"].ToString();
+
+                        // ComboBox'ta geçerlilik durumunu seçiyoruz
+                        if (cmbDurum.Items.Contains(gecerlilikDurumu))
+                        {
+                            cmbDurum.SelectedItem = gecerlilikDurumu;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Veritabanındaki geçerlilik durumu ComboBox'ta mevcut değil.");
+                        }
+                    }
+                }
+            }
         }
     }
 }

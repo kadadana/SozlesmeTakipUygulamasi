@@ -38,13 +38,13 @@
             dtpBitisTarihi = new DateTimePicker();
             label4 = new Label();
             label5 = new Label();
-            cmbGecerlilik = new ComboBox();
+            cmbDurum = new ComboBox();
             label6 = new Label();
             btnEkle = new Button();
             label7 = new Label();
             label8 = new Label();
             dosyaEkle = new Button();
-            btnDuzenle = new Button();
+            btnKaydet = new Button();
             SuspendLayout();
             // 
             // txtBaslik
@@ -56,7 +56,6 @@
             txtBaslik.Name = "txtBaslik";
             txtBaslik.Size = new Size(217, 29);
             txtBaslik.TabIndex = 0;
-            txtBaslik.TextChanged += txtBaslik_TextChanged;
             // 
             // label1
             // 
@@ -146,14 +145,14 @@
             label5.TabIndex = 9;
             label5.Text = "Bitiş Tarihi:";
             // 
-            // cmbGecerlilik
+            // cmbDurum
             // 
-            cmbGecerlilik.FormattingEnabled = true;
-            cmbGecerlilik.Items.AddRange(new object[] { "Geçerli", "Sona ermiş" });
-            cmbGecerlilik.Location = new Point(287, 238);
-            cmbGecerlilik.Name = "cmbGecerlilik";
-            cmbGecerlilik.Size = new Size(217, 23);
-            cmbGecerlilik.TabIndex = 10;
+            cmbDurum.FormattingEnabled = true;
+            cmbDurum.Items.AddRange(new object[] { "Geçerli", "Sona ermiş" });
+            cmbDurum.Location = new Point(287, 238);
+            cmbDurum.Name = "cmbDurum";
+            cmbDurum.Size = new Size(217, 23);
+            cmbDurum.TabIndex = 10;
             // 
             // label6
             // 
@@ -161,9 +160,9 @@
             label6.Font = new Font("Segoe UI", 12F);
             label6.Location = new Point(52, 236);
             label6.Name = "label6";
-            label6.Size = new Size(152, 21);
+            label6.Size = new Size(138, 21);
             label6.TabIndex = 11;
-            label6.Text = "Sözleşme Geçerliliği:";
+            label6.Text = "Sözleşme Durumu";
             // 
             // btnEkle
             // 
@@ -187,6 +186,7 @@
             label7.Size = new Size(256, 51);
             label7.TabIndex = 13;
             label7.Text = "Sözleşme Ekle";
+            label7.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // label8
             // 
@@ -209,17 +209,18 @@
             dosyaEkle.UseVisualStyleBackColor = true;
             dosyaEkle.Click += dosyaEkle_Click;
             // 
-            // btnDuzenle
+            // btnKaydet
             // 
-            btnDuzenle.BackColor = SystemColors.MenuHighlight;
-            btnDuzenle.FlatStyle = FlatStyle.Popup;
-            btnDuzenle.Font = new Font("Segoe UI", 18F);
-            btnDuzenle.Location = new Point(287, 307);
-            btnDuzenle.Name = "btnDuzenle";
-            btnDuzenle.Size = new Size(217, 44);
-            btnDuzenle.TabIndex = 15;
-            btnDuzenle.Text = "Kaydet";
-            btnDuzenle.UseVisualStyleBackColor = false;
+            btnKaydet.BackColor = SystemColors.MenuHighlight;
+            btnKaydet.FlatStyle = FlatStyle.Popup;
+            btnKaydet.Font = new Font("Segoe UI", 18F);
+            btnKaydet.Location = new Point(287, 307);
+            btnKaydet.Name = "btnKaydet";
+            btnKaydet.Size = new Size(217, 44);
+            btnKaydet.TabIndex = 16;
+            btnKaydet.Text = "Kaydet";
+            btnKaydet.UseVisualStyleBackColor = false;
+            btnKaydet.Click += btnKaydet_Click;
             // 
             // SozlesmeEkle
             // 
@@ -227,12 +228,13 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             ClientSize = new Size(543, 364);
+            Controls.Add(btnKaydet);
             Controls.Add(label7);
             Controls.Add(dosyaEkle);
             Controls.Add(label8);
             Controls.Add(btnEkle);
             Controls.Add(label6);
-            Controls.Add(cmbGecerlilik);
+            Controls.Add(cmbDurum);
             Controls.Add(label5);
             Controls.Add(label4);
             Controls.Add(dtpBitisTarihi);
@@ -244,8 +246,7 @@
             Controls.Add(label1);
             Controls.Add(txtBaslik);
             Name = "SozlesmeEkle";
-            Text = "6";
-            Load += SozlesmeEkle_Load;
+            Text = "Sözleşme Ekle";
             ResumeLayout(false);
             PerformLayout();
         }
@@ -262,12 +263,13 @@
         private DateTimePicker dtpBitisTarihi;
         private Label label4;
         private Label label5;
-        private ComboBox cmbGecerlilik;
+        private ComboBox cmbDurum;
         private Label label6;
         private Button btnEkle;
+        
         private Label label7;
         private Label label8;
         private Button dosyaEkle;
-        private Button btnDuzenle;
+        private Button btnKaydet;
     }
 }

@@ -36,6 +36,7 @@
             btnSozlesmeSil = new Button();
             btnSozlesmeEkle = new Button();
             btnSozlesmeDuzenle = new Button();
+            btnSozlesmeleriGuncelle = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)veriDeposuBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)veriDeposuBindingSource1).BeginInit();
@@ -82,18 +83,25 @@
             btnSozlesmeDuzenle.UseVisualStyleBackColor = true;
             btnSozlesmeDuzenle.Click += btnSozlesmeDuzenle_Click;
             // 
+            // btnSozlesmeleriGuncelle
+            // 
+            resources.ApplyResources(btnSozlesmeleriGuncelle, "btnSozlesmeleriGuncelle");
+            btnSozlesmeleriGuncelle.Name = "btnSozlesmeleriGuncelle";
+            btnSozlesmeleriGuncelle.UseVisualStyleBackColor = true;
+            btnSozlesmeleriGuncelle.Click += button1_Click;
+            // 
             // SozlesmeDBEkrani
             // 
             resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
+            Controls.Add(btnSozlesmeleriGuncelle);
             Controls.Add(btnSozlesmeDuzenle);
             Controls.Add(btnSozlesmeEkle);
             Controls.Add(btnSozlesmeSil);
             Controls.Add(dataGridView1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "SozlesmeDBEkrani";
-            Load += SozlesmeDBEkrani_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)veriDeposuBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)veriDeposuBindingSource1).EndInit();
@@ -108,5 +116,6 @@
         private Button btnSozlesmeSil;
         private Button btnSozlesmeEkle;
         private Button btnSozlesmeDuzenle;
+        private Button btnSozlesmeleriGuncelle;
     }
 }
