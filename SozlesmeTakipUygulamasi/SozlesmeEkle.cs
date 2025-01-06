@@ -55,17 +55,14 @@ namespace SozlesmeTakipUygulamasi
         }
         private void btnKaydet_Click(object sender, EventArgs e)
         {
-            
 
 
-            // VeriDeposu sınıfından bir nesne oluşturuyoruz
+
             VeriDeposu veriDeposu = new VeriDeposu();
 
-            // BaglantiOlustur metodunu çağırıyoruz
             SQLiteConnection baglanti = veriDeposu.BaglantiOlustur();
 
-            // İlgili verileri alıyoruz
-            int sozlesmeId = VeriCekenId; // VeriCekenId'yi doğru şekilde almanız gerek
+            int sozlesmeId = VeriCekenId;
             string baslik = txtBaslik.Text;
             string taraflar = txtTaraflar.Text;
             DateTime baslangicTarihi = dtpBaslangicTarihi.Value;
@@ -73,7 +70,6 @@ namespace SozlesmeTakipUygulamasi
             double tutar = Convert.ToDouble(txtTutar.Text);
             string durum = cmbDurum.SelectedIndex.ToString();
 
-            // SQL komutunu yazıyoruz
             string guncelleKomutu = @"
         UPDATE Sozlesme
         SET Baslik = @Baslik,
@@ -85,7 +81,6 @@ namespace SozlesmeTakipUygulamasi
         WHERE Id = @Id;
     ";
 
-            // Veritabanı bağlantısını ve komutları kullanıyoruz
             using (var komut = new SQLiteCommand(guncelleKomutu, baglanti))
             {
                 komut.Parameters.AddWithValue("@Id", sozlesmeId);
@@ -99,34 +94,25 @@ namespace SozlesmeTakipUygulamasi
                 komut.ExecuteNonQuery();
             }
 
-            // Bilgilendirme mesajı
             MessageBox.Show("Sözleşme başarıyla güncellendi.");
 
-            // Ekranı kapatıyoruz
             this.Close();
         }
-        
+
         private void btnEkle_Click(object sender, EventArgs e)
         {
 
-            
-            Sozlesme sozlesme = new Sozlesme
-            {
+            Sozlesme sozlesme = new Sozlesme();
 
+            string sozlesmeDosyaYolu = null;
 
-                Id = depo.IdSayac() + 1,
-                Baslik = txtBaslik.Text,
-                Taraflar = txtTaraflar.Text,
-                Tutar = Convert.ToDouble(txtTutar.Text),
-                BaslangicTarihi = dtpBaslangicTarihi.Value,
-                BitisTarihi = dtpBitisTarihi.Value,
-                Durum = cmbDurum.SelectedItem.ToString(),
-                DosyaYolu = secilenDosyaYolu,
-
-            };
-
-
-
+            sozlesme.Id = depo.IdSayac() + 1;
+            sozlesme.Baslik = txtBaslik.Text;
+            sozlesme.Taraflar = txtTaraflar.Text;
+            sozlesme.Tutar = Convert.ToDouble(txtTutar.Text);
+            sozlesme.BaslangicTarihi = dtpBaslangicTarihi.Value;
+            sozlesme.BitisTarihi = dtpBitisTarihi.Value;
+            sozlesme.Durum = cmbDurum.SelectedItem.ToString();
 
             if (!Directory.Exists(kokKlasoru))
             {
@@ -139,31 +125,40 @@ namespace SozlesmeTakipUygulamasi
                 Directory.CreateDirectory(sozlesmeKlasoru);
             }
 
-            if (!string.IsNullOrEmpty(sozlesme.DosyaYolu))
+            if (!string.IsNullOrEmpty(secilenDosyaYolu))
             {
-                DosyayiKopyala(sozlesme.DosyaYolu, sozlesmeKlasoru);
+                sozlesmeDosyaYolu = DosyayiKopyala(secilenDosyaYolu, sozlesmeKlasoru);
             }
 
-            depo.SozlesmeyiDByeEkle(sozlesme.Id, sozlesme.Baslik, sozlesme.Taraflar, sozlesme.BaslangicTarihi, sozlesme.BitisTarihi, (double)sozlesme.Tutar, sozlesme.Durum);
+
+
+            sozlesme.DosyaYolu = sozlesmeKlasoru;
+
+            depo.SozlesmeyiDByeEkle(sozlesme.Id, sozlesme.Baslik, sozlesme.Taraflar, sozlesme.BaslangicTarihi, sozlesme.BitisTarihi, (double)sozlesme.Tutar, sozlesme.Durum, sozlesme.DosyaYolu);
 
             secilenDosyaYolu = null;
+
+            this.Close();
 
         }
 
 
 
 
-        private void DosyayiKopyala(string kaynakDosyaYolu, string hedefKlasör)
+        private string DosyayiKopyala(string kaynakDosyaYolu, string hedefKlasör)
         {
+            string sonucDosyaYolu = null;
             if (!string.IsNullOrEmpty(kaynakDosyaYolu) && File.Exists(kaynakDosyaYolu))
             {
 
                 string dosyaAdi = Path.GetFileName(kaynakDosyaYolu);
                 string hedefDosyaYolu = Path.Combine(hedefKlasör, dosyaAdi);
-
                 File.Copy(kaynakDosyaYolu, hedefDosyaYolu, true);
+                sonucDosyaYolu = Path.GetFullPath(hedefDosyaYolu);
 
+                return sonucDosyaYolu;
             }
+            return sonucDosyaYolu;
         }
         private void txtTutar_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -185,7 +180,7 @@ namespace SozlesmeTakipUygulamasi
             }
         }
 
-        
+
 
         public void VerileriYukle(int sozlesmeId)
         {
@@ -201,11 +196,9 @@ namespace SozlesmeTakipUygulamasi
         }
         public void SozlesmeGetir(int sozlesmeId)
         {
-            // VeriDeposu sınıfından bir nesne oluşturuyoruz
             VeriDeposu veriDeposu = new VeriDeposu();
             SQLiteConnection baglanti = veriDeposu.BaglantiOlustur();
 
-            // Veritabanından veri çekme
             string sorgu = "SELECT * FROM Sozlesme WHERE Id = @Id";
             using (SQLiteCommand komut = new SQLiteCommand(sorgu, baglanti))
             {
@@ -215,7 +208,6 @@ namespace SozlesmeTakipUygulamasi
                 {
                     if (reader.Read())
                     {
-                        // Verileri alıyoruz ve ekrandaki alanlara yerleştiriyoruz
                         txtBaslik.Text = reader["Baslik"].ToString();
                         txtTaraflar.Text = reader["Taraflar"].ToString();
                         dtpBaslangicTarihi.Value = Convert.ToDateTime(reader["BaslangicTarihi"]);
@@ -223,7 +215,6 @@ namespace SozlesmeTakipUygulamasi
                         txtTutar.Text = reader["Tutar"].ToString();
                         string gecerlilikDurumu = reader["Durum"].ToString();
 
-                        // ComboBox'ta geçerlilik durumunu seçiyoruz
                         if (cmbDurum.Items.Contains(gecerlilikDurumu))
                         {
                             cmbDurum.SelectedItem = gecerlilikDurumu;
@@ -236,5 +227,6 @@ namespace SozlesmeTakipUygulamasi
                 }
             }
         }
+
     }
 }

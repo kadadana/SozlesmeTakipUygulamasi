@@ -88,7 +88,7 @@
             resources.ApplyResources(btnSozlesmeleriGuncelle, "btnSozlesmeleriGuncelle");
             btnSozlesmeleriGuncelle.Name = "btnSozlesmeleriGuncelle";
             btnSozlesmeleriGuncelle.UseVisualStyleBackColor = true;
-            btnSozlesmeleriGuncelle.Click += button1_Click;
+            btnSozlesmeleriGuncelle.Click += btnSozlesmeleriGuncelle_Click;
             // 
             // SozlesmeDBEkrani
             // 

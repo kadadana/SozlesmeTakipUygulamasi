@@ -49,7 +49,8 @@ namespace SozlesmeTakipUygulamasi
                         BaslangicTarihi TEXT,
                         BitisTarihi TEXT,
                         Tutar DOUBLE,
-                        Durum TEXT
+                        Durum TEXT,
+                        DosyaYolu TEXT
                     );
                 ";
 
@@ -69,13 +70,13 @@ namespace SozlesmeTakipUygulamasi
             }
 
         }
-        public void SozlesmeyiDByeEkle(int id, string baslik, string taraflar, DateTime baslangicTarihi, DateTime bitisTarihi, double tutar, string durum)
+        public void SozlesmeyiDByeEkle(int id, string baslik, string taraflar, DateTime baslangicTarihi, DateTime bitisTarihi, double tutar, string durum, string dosyaYolu)
         {
             using (var baglanti = BaglantiOlustur())
             {
                 string ekleKomutu = @"
-                    INSERT INTO Sozlesme (Baslik, Taraflar, BaslangicTarihi, BitisTarihi, Tutar, Durum)
-                    VALUES (@Baslik, @Taraflar, @BaslangicTarihi, @BitisTarihi, @Tutar, @Durum);
+                    INSERT INTO Sozlesme (Baslik, Taraflar, BaslangicTarihi, BitisTarihi, Tutar, Durum, DosyaYolu)
+                    VALUES (@Baslik, @Taraflar, @BaslangicTarihi, @BitisTarihi, @Tutar, @Durum, @DosyaYolu);
                     ";
                 using (var komut = new SQLiteCommand(ekleKomutu, baglanti))
                 {
@@ -86,6 +87,7 @@ namespace SozlesmeTakipUygulamasi
                     komut.Parameters.AddWithValue("@BitisTarihi", bitisTarihi.ToString("dd-MM-yyyy"));
                     komut.Parameters.AddWithValue("@Tutar", tutar);
                     komut.Parameters.AddWithValue("@Durum", durum);
+                    komut.Parameters.AddWithValue("@DosyaYolu", dosyaYolu);
 
                     komut.ExecuteNonQuery();
 
@@ -162,6 +164,7 @@ namespace SozlesmeTakipUygulamasi
                                     out var bitisTarih) ? bitisTarih : DateTime.MinValue,
                                 Tutar = Convert.ToDouble(reader["Tutar"]),
                                 Durum = reader["Durum"].ToString(),
+                                DosyaYolu = reader["DosyaYolu"].ToString()
                             };
 
                             return sozlesme;
@@ -215,7 +218,8 @@ namespace SozlesmeTakipUygulamasi
                                 BaslangicTarihi = Convert.ToDateTime(reader["BaslangicTarihi"]),
                                 BitisTarihi = Convert.ToDateTime(reader["BitisTarihi"]),
                                 Tutar = Convert.ToDouble(reader["Tutar"]),
-                                Durum = reader["Durum"].ToString()
+                                Durum = reader["Durum"].ToString(),
+                                DosyaYolu = reader["DosyaYolu"].ToString()
                             };
 
                             return sozlesme;

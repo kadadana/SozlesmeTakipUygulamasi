@@ -23,7 +23,7 @@ namespace SozlesmeTakipUygulamasi
 
 
 
-        private void VerileriGoster()
+        public void VerileriGoster()
         {
 
 
@@ -39,6 +39,7 @@ namespace SozlesmeTakipUygulamasi
             dataGridView1.Columns["BitisTarihi"].HeaderText = "Bitiş Tarihi";
             dataGridView1.Columns["Tutar"].HeaderText = "Tutar";
             dataGridView1.Columns["Durum"].HeaderText = "Durum";
+            dataGridView1.Columns["DosyaYolu"].HeaderText = "Dosya Yolu";
 
 
         }
@@ -68,10 +69,27 @@ namespace SozlesmeTakipUygulamasi
                     foreach (DataGridViewRow satir in dataGridView1.SelectedRows)
                     {
                         int id = Convert.ToInt32(satir.Cells["Id"].Value);
+                        string dosyaYolu = satir.Cells["DosyaYolu"].Value.ToString();
 
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(dosyaYolu))
+                            {
+                                Directory.Delete(dosyaYolu, true);
+
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                            Console.WriteLine("Bir hata oluştu."); ;
+                        }
+                        
                         depo.SozlesmeSil(id);
 
-                        dataGridView1.Rows.Remove(satir);
+
+
+                        VerileriGoster();
                     }
 
                     MessageBox.Show("Sözleşme başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -109,10 +127,11 @@ namespace SozlesmeTakipUygulamasi
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnSozlesmeleriGuncelle_Click(object sender, EventArgs e)
         {
             VerileriGoster();
         }
+
     }
 
 }
