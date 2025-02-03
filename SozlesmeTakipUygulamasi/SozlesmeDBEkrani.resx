@@ -138,7 +138,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;dataGridView1.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <metadata name="veriDeposuBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
@@ -172,7 +172,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnSozlesmeSil.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="btnSozlesmeEkle.Location" type="System.Drawing.Point, System.Drawing">
     <value>1026, 79</value>
@@ -196,7 +196,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnSozlesmeEkle.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="btnSozlesmeDuzenle.Location" type="System.Drawing.Point, System.Drawing">
     <value>1026, 146</value>
@@ -220,7 +220,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnSozlesmeDuzenle.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="btnSozlesmeleriGuncelle.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -247,6 +247,37 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnSozlesmeleriGuncelle.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="btnKlasorYolunuAc.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>System</value>
+  </data>
+  <data name="btnKlasorYolunuAc.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="btnKlasorYolunuAc.Location" type="System.Drawing.Point, System.Drawing">
+    <value>1026, 280</value>
+  </data>
+  <data name="btnKlasorYolunuAc.Size" type="System.Drawing.Size, System.Drawing">
+    <value>92, 61</value>
+  </data>
+  <data name="btnKlasorYolunuAc.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="btnKlasorYolunuAc.Text" xml:space="preserve">
+    <value>Sözleşme
+Klasörünü Aç</value>
+  </data>
+  <data name="&gt;&gt;btnKlasorYolunuAc.Name" xml:space="preserve">
+    <value>btnKlasorYolunuAc</value>
+  </data>
+  <data name="&gt;&gt;btnKlasorYolunuAc.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnKlasorYolunuAc.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnKlasorYolunuAc.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">

@@ -137,7 +137,7 @@ namespace SozlesmeTakipUygulamasi
             depo.SozlesmeyiDByeEkle(sozlesme.Id, sozlesme.Baslik, sozlesme.Taraflar, sozlesme.BaslangicTarihi, sozlesme.BitisTarihi, (double)sozlesme.Tutar, sozlesme.Durum, sozlesme.DosyaYolu);
 
             secilenDosyaYolu = null;
-
+            MessageBox.Show("Sözleşme eklenmiştir.");
             this.Close();
 
         }

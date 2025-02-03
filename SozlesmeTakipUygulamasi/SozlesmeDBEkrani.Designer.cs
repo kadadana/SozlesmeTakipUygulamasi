@@ -37,6 +37,7 @@
             btnSozlesmeEkle = new Button();
             btnSozlesmeDuzenle = new Button();
             btnSozlesmeleriGuncelle = new Button();
+            btnKlasorYolunuAc = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)veriDeposuBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)veriDeposuBindingSource1).BeginInit();
@@ -90,11 +91,19 @@
             btnSozlesmeleriGuncelle.UseVisualStyleBackColor = true;
             btnSozlesmeleriGuncelle.Click += btnSozlesmeleriGuncelle_Click;
             // 
+            // btnKlasorYolunuAc
+            // 
+            resources.ApplyResources(btnKlasorYolunuAc, "btnKlasorYolunuAc");
+            btnKlasorYolunuAc.Name = "btnKlasorYolunuAc";
+            btnKlasorYolunuAc.UseVisualStyleBackColor = true;
+            btnKlasorYolunuAc.Click += btnKlasorYolunuAc_Click;
+            // 
             // SozlesmeDBEkrani
             // 
             resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
+            Controls.Add(btnKlasorYolunuAc);
             Controls.Add(btnSozlesmeleriGuncelle);
             Controls.Add(btnSozlesmeDuzenle);
             Controls.Add(btnSozlesmeEkle);
@@ -117,5 +126,6 @@
         private Button btnSozlesmeEkle;
         private Button btnSozlesmeDuzenle;
         private Button btnSozlesmeleriGuncelle;
+        private Button btnKlasorYolunuAc;
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SQLite;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -41,6 +42,11 @@ namespace SozlesmeTakipUygulamasi
             dataGridView1.Columns["Durum"].HeaderText = "Durum";
             dataGridView1.Columns["DosyaYolu"].HeaderText = "Dosya Yolu";
 
+            dataGridView1.Columns["Id"].Width = 50;
+            dataGridView1.Columns["BaslangicTarihi"].Width = 125;
+            dataGridView1.Columns["BitisTarihi"].Width = 125;
+
+            dataGridView1.Columns["DosyaYolu"].Width = 265;
 
         }
 
@@ -82,9 +88,9 @@ namespace SozlesmeTakipUygulamasi
                         catch (Exception)
                         {
 
-                            Console.WriteLine("Bir hata oluştu."); ;
+                            MessageBox.Show("Bir hata oluştu."); ;
                         }
-                        
+
                         depo.SozlesmeSil(id);
 
 
@@ -131,6 +137,33 @@ namespace SozlesmeTakipUygulamasi
         {
             VerileriGoster();
         }
+
+        private void btnKlasorYolunuAc_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+                int id = Convert.ToInt32(dataGridView1.SelectedRows [0].Cells["Id"].Value);
+                string dosyaYolu = dataGridView1.SelectedRows[0].Cells["DosyaYolu"].Value.ToString();
+                dosyaYolu = dosyaYolu.Replace(@"\\", @"\");
+                if (Directory.Exists(dosyaYolu))
+                {
+                    Process.Start("explorer.exe", dosyaYolu);
+                }
+                else
+                {
+                    
+                    MessageBox.Show(dosyaYolu + " yolunda klasör bulunamadı!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+
+            }
+            else
+            {
+                MessageBox.Show("En az bir satır seçmeniz gerekmektedir.");
+            }
+
+        }
+
 
     }
 
