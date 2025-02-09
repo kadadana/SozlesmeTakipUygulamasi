@@ -180,7 +180,6 @@ namespace SozlesmeTakipUygulamasi
         }
         private void sozlesmeAra()
         {
-            VeriDeposu veriDeposu = new VeriDeposu();
             string baslangicTarihiBasi;
             string baslangicTarihiSonu;
             string bitisTarihiBasi;
@@ -260,8 +259,7 @@ namespace SozlesmeTakipUygulamasi
         {
 
             string yeniSozlesmeId = sozlesmeId.ToString();
-            VeriDeposu veriDeposu = new VeriDeposu();
-            DataTable dataTable = veriDeposu.VeriFiltrele(yeniSozlesmeId);
+            DataTable dataTable = depo.VeriFiltrele(yeniSozlesmeId);
 
             txtBaslik.Text = dataTable.Rows[0]["Baslik"].ToString();
             txtTaraflar.Text = dataTable.Rows[0]["Taraflar"].ToString();
