@@ -38,6 +38,7 @@
             btnSozlesmeDuzenle = new Button();
             btnSozlesmeleriGuncelle = new Button();
             btnKlasorYolunuAc = new Button();
+            btnAra = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)veriDeposuBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)veriDeposuBindingSource1).BeginInit();
@@ -48,10 +49,10 @@
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.AllowUserToOrderColumns = true;
+            resources.ApplyResources(dataGridView1, "dataGridView1");
             dataGridView1.BackgroundColor = SystemColors.GradientActiveCaption;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.GridColor = SystemColors.MenuHighlight;
-            resources.ApplyResources(dataGridView1, "dataGridView1");
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
             // 
@@ -98,19 +99,27 @@
             btnKlasorYolunuAc.UseVisualStyleBackColor = true;
             btnKlasorYolunuAc.Click += btnKlasorYolunuAc_Click;
             // 
+            // btnAra
+            // 
+            resources.ApplyResources(btnAra, "btnAra");
+            btnAra.Name = "btnAra";
+            btnAra.UseVisualStyleBackColor = true;
+            btnAra.Click += btnAra_Click;
+            // 
             // SozlesmeDBEkrani
             // 
             resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
+            Controls.Add(btnAra);
             Controls.Add(btnKlasorYolunuAc);
             Controls.Add(btnSozlesmeleriGuncelle);
             Controls.Add(btnSozlesmeDuzenle);
             Controls.Add(btnSozlesmeEkle);
             Controls.Add(btnSozlesmeSil);
             Controls.Add(dataGridView1);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "SozlesmeDBEkrani";
+            Resize += SozlesmeDBEkrani_Resize;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)veriDeposuBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)veriDeposuBindingSource1).EndInit();
@@ -119,7 +128,7 @@
 
         #endregion
 
-        private DataGridView dataGridView1;
+        public DataGridView dataGridView1;
         private BindingSource veriDeposuBindingSource;
         private BindingSource veriDeposuBindingSource1;
         private Button btnSozlesmeSil;
@@ -127,5 +136,6 @@
         private Button btnSozlesmeDuzenle;
         private Button btnSozlesmeleriGuncelle;
         private Button btnKlasorYolunuAc;
+        private Button btnAra;
     }
 }

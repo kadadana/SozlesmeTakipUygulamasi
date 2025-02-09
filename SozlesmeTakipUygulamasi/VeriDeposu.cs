@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Data;
+using System.Data.SqlClient;
 using System.Data.SQLite;
+using System.Runtime.CompilerServices;
+using System.Windows.Forms;
 
 
 namespace SozlesmeTakipUygulamasi
 {
     public class VeriDeposu
     {
+
         public SQLiteConnection BaglantiOlustur()
         {
             string dbYolu = @"C:\Sozlesmeler\sozlesmeler.db";
@@ -25,7 +29,7 @@ namespace SozlesmeTakipUygulamasi
         {
             using (var baglanti = BaglantiOlustur())
             {
-                
+
 
                 string tabloKontrolSorgusu = @"
                 SELECT name
@@ -61,9 +65,9 @@ namespace SozlesmeTakipUygulamasi
                     }
                     else
                     {
-                        
+
                     }
-                    
+
                 }
 
 
@@ -93,9 +97,9 @@ namespace SozlesmeTakipUygulamasi
 
                 }
             }
-            
+
         }
-        
+
 
 
         public void SozlesmeSil(int id)
@@ -107,8 +111,8 @@ namespace SozlesmeTakipUygulamasi
                 using (var komut = new SQLiteCommand(silKomutu, baglanti))
                 {
                     komut.Parameters.AddWithValue("@Id", id);
-                    
-                    komut.ExecuteNonQuery() ;
+
+                    komut.ExecuteNonQuery();
                 }
             }
         }
@@ -119,7 +123,7 @@ namespace SozlesmeTakipUygulamasi
 
             using (var baglanti = BaglantiOlustur())
             {
-                
+
                 string sorgu = "SELECT * FROM Sozlesme";
 
                 using (var komut = new SQLiteCommand(sorgu, baglanti))
@@ -132,48 +136,7 @@ namespace SozlesmeTakipUygulamasi
             return dataTable;
         }
 
-        public Sozlesme SozlesmeBilgileriniGetir(int sozlesmeId)
-        {
-            using (var baglanti = BaglantiOlustur())
-            {
-                string sorgu = "SELECT * FROM Sozlesme WHERE Id = @SozlesmeId";
 
-                using (var komut = new SQLiteCommand(sorgu, baglanti))
-                {
-                    komut.Parameters.AddWithValue("@SozlesmeId", sozlesmeId);
-                    using (var reader = komut.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            Sozlesme sozlesme = new Sozlesme
-                            {
-                                Id = Convert.ToInt32(reader["Id"]),
-                                Baslik = reader["Baslik"].ToString(),
-                                Taraflar = reader["Taraflar"].ToString(),
-                                BaslangicTarihi = DateTime.TryParseExact(
-                                    reader["BaslangicTarihi"].ToString(),
-                                    "dd-MM-yyyy",
-                                    null,
-                                    System.Globalization.DateTimeStyles.None,
-                                    out var baslangicTarih) ? baslangicTarih : DateTime.MinValue,
-                                BitisTarihi = DateTime.TryParseExact(
-                                    reader["BitisTarihi"].ToString(),
-                                    "dd-MM-yyyy",
-                                    null,
-                                    System.Globalization.DateTimeStyles.None,
-                                    out var bitisTarih) ? bitisTarih : DateTime.MinValue,
-                                Tutar = Convert.ToDouble(reader["Tutar"]),
-                                Durum = reader["Durum"].ToString(),
-                                DosyaYolu = reader["DosyaYolu"].ToString()
-                            };
-
-                            return sozlesme;
-                        }
-                    }
-                }
-            }
-            return null;
-        }
 
         public int IdSayac()
         {
@@ -197,41 +160,103 @@ namespace SozlesmeTakipUygulamasi
             return idSayac;
         }
 
-        public Sozlesme SozlesmeGetir(int sozlesmeId)
+        public DataTable VeriFiltrele(string sozlesmeId)
         {
+
+            DataTable dataTable = new DataTable();
+
+
             using (var baglanti = BaglantiOlustur())
             {
-                string sorgu = "SELECT * FROM Sozlesme WHERE Id = @SozlesmeId";
+                string sorgu = $"SELECT * FROM Sozlesme WHERE Id LIKE \"{sozlesmeId}\"";
 
                 using (var komut = new SQLiteCommand(sorgu, baglanti))
                 {
-                    komut.Parameters.AddWithValue("@SozlesmeId", sozlesmeId);
-                    using (var reader = komut.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            Sozlesme sozlesme = new Sozlesme
-                            {
-                                Id = Convert.ToInt32(reader["Id"]),
-                                Baslik = reader["Baslik"].ToString(),
-                                Taraflar = reader["Taraflar"].ToString(),
-                                BaslangicTarihi = Convert.ToDateTime(reader["BaslangicTarihi"]),
-                                BitisTarihi = Convert.ToDateTime(reader["BitisTarihi"]),
-                                Tutar = Convert.ToDouble(reader["Tutar"]),
-                                Durum = reader["Durum"].ToString(),
-                                DosyaYolu = reader["DosyaYolu"].ToString()
-                            };
+                    komut.Parameters.AddWithValue("@deger", sozlesmeId);
+                    SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter(komut);
+                    dataAdapter.Fill(dataTable);
+                }
+            }
 
-                            return sozlesme;
-                        }
+            return dataTable;
+        }
+        public DataTable VeriFiltrele(string sozlesmeId, string baslik, string taraflar, string baslangicTarihiBasi, string baslangicTarihiSonu, string bitisTarihiBasi, string bitisTarihiSonu, string tutarMin, string tutarMax, string durum)
+        {
+            string yeniDurum = durum == "Hepsi" ? "" : durum;
+            DataTable dataTable = new DataTable();
+
+            using (var baglanti = BaglantiOlustur())
+            {
+                string sorgu = "SELECT * FROM Sozlesme WHERE @degerId = '' OR Id LIKE @degerId\n"
+                    + "INTERSECT\n" +
+                    "SELECT * FROM Sozlesme WHERE @degerBaslik = '' OR Baslik LIKE @degerBaslik\n"
+                    + "INTERSECT\n" +
+                    "SELECT * FROM Sozlesme WHERE @degerTaraflar = '' OR Taraflar LIKE @degerTaraflar\n"
+                    + "INTERSECT\n" +
+                    "SELECT * FROM Sozlesme WHERE (@degerBaslangicTarihiBasi IS NULL OR BaslangicTarihi >= @degerBaslangicTarihiBasi) AND (@degerBaslangicSonu IS NULL OR BaslangicTarihi <= @degerBaslangicSonu)\n"
+                    + "INTERSECT\n" +
+                    "SELECT * FROM Sozlesme WHERE (@degerBitisTarihiBasi IS NULL OR BitisTarihi >= @degerBitisTarihiBasi) AND (@degerBitisSonu IS NULL OR BitisTarihi <= @degerBitisSonu)\n"
+                    + "INTERSECT\n" +
+                    "SELECT * FROM Sozlesme WHERE (@degerTutarMin IS NULL OR Tutar >= @degerTutarMin) AND (@degerTutarMax IS NULL OR Tutar <= @degerTutarMax)\n"
+                    + "INTERSECT\n" +
+                    "SELECT * FROM Sozlesme WHERE @degerDurum = '' OR Durum LIKE @degerDurum\n";
+
+                using (var komut = new SQLiteCommand(sorgu, baglanti))
+                {
+                    komut.Parameters.AddWithValue("@degerId", sozlesmeId);
+                    komut.Parameters.AddWithValue("@degerBaslik", "%" + baslik + "%");
+                    komut.Parameters.AddWithValue("@degerTaraflar", "%" + taraflar + "%");
+                    komut.Parameters.AddWithValue("@degerBaslangicTarihiBasi", baslangicTarihiBasi);
+                    komut.Parameters.AddWithValue("@degerBaslangicSonu", baslangicTarihiSonu);
+                    komut.Parameters.AddWithValue("@degerBitisTarihiBasi", bitisTarihiBasi);
+                    komut.Parameters.AddWithValue("@degerBitisSonu", bitisTarihiSonu);
+                    komut.Parameters.AddWithValue("@degerTutarMin", tutarMin);
+                    komut.Parameters.AddWithValue("@degerTutarMax", tutarMax);
+                    komut.Parameters.AddWithValue("@degerDurum", "%" + yeniDurum  + "%");
+
+                    
+
+                    SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter(komut);
+                    dataAdapter.Fill(dataTable);
+
+
+                    if (dataTable.Rows.Count == 0)
+                    {
+                        MessageBox.Show("Hiçbir veri bulunamadı.");
                     }
                 }
             }
-            return null;
+            return dataTable;
+
+        }
+        public void SozlesmeGuncelle(int sozlesmeId, string baslik, string taraflar, DateTime baslangicTarihi, DateTime bitisTarihi, double tutar, string durum)
+        {
+            SQLiteConnection baglanti = BaglantiOlustur();
+            string guncelleKomutu = @"
+            UPDATE Sozlesme
+            SET 
+                Baslik = @Baslik,
+                Taraflar = @Taraflar,
+                BaslangicTarihi = @BaslangicTarihi,
+                BitisTarihi = @BitisTarihi,
+                Tutar = @Tutar,
+                Durum = @Durum
+            WHERE Id = @Id;";
+
+            using (var komut = new SQLiteCommand(guncelleKomutu, baglanti))
+            {
+                komut.Parameters.AddWithValue("@Id", sozlesmeId);
+                komut.Parameters.AddWithValue("@Baslik", baslik);
+                komut.Parameters.AddWithValue("@Taraflar", taraflar);
+                komut.Parameters.AddWithValue("@BaslangicTarihi", baslangicTarihi.ToString("yyyy-MM-dd"));
+                komut.Parameters.AddWithValue("@BitisTarihi", bitisTarihi.ToString("yyyy-MM-dd"));
+                komut.Parameters.AddWithValue("@Tutar", tutar);
+                komut.Parameters.AddWithValue("@Durum", durum);
+
+                komut.ExecuteNonQuery();
+            }
         }
 
 
-
     }
-
 }
