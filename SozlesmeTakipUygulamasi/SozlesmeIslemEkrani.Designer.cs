@@ -1,6 +1,6 @@
 ﻿namespace SozlesmeTakipUygulamasi
 {
-    partial class SozlesmeIslemleri
+    partial class SozlesmeIslemEkrani
     {
         /// <summary>
         ///  Required designer variable.

@@ -9,7 +9,7 @@ using System.Data;
 
 namespace SozlesmeTakipUygulamasi
 {
-    public partial class SozlesmeIslemleri : Form
+    public partial class SozlesmeIslemEkrani : Form
     {
         private SozlesmeDBEkrani anaForm;
         private string kokKlasoru = @"C:\Sozlesmeler\";
@@ -19,7 +19,7 @@ namespace SozlesmeTakipUygulamasi
         public int islem;
 
 
-        public SozlesmeIslemleri(int Islem, SozlesmeDBEkrani form)
+        public SozlesmeIslemEkrani(int Islem, SozlesmeDBEkrani form)
         {
             islem = Islem;
             anaForm = form;

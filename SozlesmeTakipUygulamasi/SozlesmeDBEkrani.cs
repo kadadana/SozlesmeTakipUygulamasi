@@ -47,7 +47,7 @@ namespace SozlesmeTakipUygulamasi
 
         private void btnSozlesmeEkle_Click(object sender, EventArgs e)
         {
-            SozlesmeIslemleri sozlesmeEklemeEkrani = new SozlesmeIslemleri(1, this);
+            SozlesmeIslemEkrani sozlesmeEklemeEkrani = new SozlesmeIslemEkrani(1, this);
 
 
             sozlesmeEklemeEkrani.ShowDialog();
@@ -115,7 +115,7 @@ namespace SozlesmeTakipUygulamasi
                 DataGridViewRow seciliSatir = dataGridView1.SelectedRows[0];
                 int id = Convert.ToInt32(seciliSatir.Cells["Id"].Value);
 
-                SozlesmeIslemleri sozlesmeDuzenlemeEkrani = new SozlesmeIslemleri(2, this);
+                SozlesmeIslemEkrani sozlesmeDuzenlemeEkrani = new SozlesmeIslemEkrani(2, this);
                 sozlesmeDuzenlemeEkrani.VeriCekenId = id;
                 sozlesmeDuzenlemeEkrani.SozlesmeGetir(id);
                 sozlesmeDuzenlemeEkrani.ShowDialog();
@@ -161,7 +161,7 @@ namespace SozlesmeTakipUygulamasi
         private void btnAra_Click(object sender, EventArgs e)
         {
 
-            SozlesmeIslemleri sozlesmeAramaEkrani = new SozlesmeIslemleri(3, this);
+            SozlesmeIslemEkrani sozlesmeAramaEkrani = new SozlesmeIslemEkrani(3, this);
             btnAra.Enabled = false;
             sozlesmeAramaEkrani.FormClosed += (s, args) => { btnAra.Enabled = true; };
 
