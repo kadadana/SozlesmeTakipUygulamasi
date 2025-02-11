@@ -245,10 +245,14 @@ namespace SozlesmeTakipUygulamasi
         
         private void BitisTarihi_Validating(object sender, CancelEventArgs e)
         {
-            if (dtpBitisTarihi.Value < dtpBaslangicTarihi.Value)
+            if (dtpBaslangicTarihi.Checked == true && dtpBitisTarihi.Checked == true)
             {
-                MessageBox.Show("Bitiş tarihi, başlangıç tarihinden önce olamaz!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                e.Cancel = true;
+
+                if (dtpBitisTarihi.Value < dtpBaslangicTarihi.Value)
+                {
+                    MessageBox.Show("Bitiş tarihi, başlangıç tarihinden önce olamaz!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    e.Cancel = true;
+                }
             }
         }
 
