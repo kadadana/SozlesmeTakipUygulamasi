@@ -175,12 +175,7 @@ namespace SozlesmeTakipUygulamasi
             {
                 int toplamGenislik = dataGridView1.ClientSize.Width;
 
-                // Minimum genişlikler
-                //dataGridView1.Columns["Id"].Width = 50;
-                //dataGridView1.Columns["BaslangicTarihi"].Width = 121;
-                //dataGridView1.Columns["BitisTarihi"].Width = 121;
-                //dataGridView1.Columns["DosyaYolu"].Width = 265;
-
+                
                 
                 int col0Width = 50;
                 int col1Width = (int)(toplamGenislik * 0.05);
