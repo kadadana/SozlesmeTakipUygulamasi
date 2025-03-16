@@ -1,5 +1,5 @@
 SOZLESME TAKIP UYGULAMASI<br />
-Bu yazılım C# programlama dili ve SQLite veritabani motorunu kullanan bir Windows Forms Uygulamasidir.<br />
+Bu yazilim C# programlama dili ve SQLite veritabani motorunu kullanan bir Windows Forms Uygulamasidir.<br />
 Bu uygulamayi hazirlama amacim kendi kodlama yetenegimi gelistirmek ve veritabani teknolojilerine giris yapmakti.<br />
 Uygulamada SozlesmeDBEkrani ve SozlesmeIslemleri adinda iki adet form kullandim.<br />
 SozlesmeDBEkrani: Sozlesmelerin hepsini gorebileceginiz bir veri tablosu ve sozlesmelerle ilgili islemleri yapabileceginiz ekranlara yonlendiren butonlar bulunduruyor.<br />
